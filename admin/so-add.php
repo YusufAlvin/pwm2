@@ -21,10 +21,11 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
   $lotnumber = trim(htmlspecialchars($_POST['lot-number']));
   $qty = trim(htmlspecialchars($_POST['qty']));
 
-  if(mysqli_num_rows(mysqli_query($conn, "SELECT so_no_po FROM so WHERE so_no_po = '$no_spk'")) < 1){
-    mysqli_query($conn, "INSERT INTO so (so_no_po) VALUES ('$no_spk')");
+  if(mysqli_num_rows(mysqli_query($conn, "SELECT DISTINCT so.so_no_po, bom.bom_item_id FROM so JOIN bom ON bom.bom_id = so.so_bom_id WHERE so.so_no_po = '$no_spk' AND bom.bom_item_id = '$item'")) > 0){
+    header('Location: so.php?pesan=duplikat');
+    exit();
   }
-
+  
   $query = mysqli_query($conn, "SELECT bom_id FROM bom WHERE bom_item_id = '$item'");
   while($datas = mysqli_fetch_assoc($query)){
     mysqli_query($conn, "INSERT INTO so (so_no_po, so_bom_id, so_qty_order, so_lot_number) VALUES ('$no_spk', $datas[bom_id], $qty, '$lotnumber')");
