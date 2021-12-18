@@ -20,8 +20,6 @@ $realisasi = mysqli_fetch_assoc($queryrealisasi);
 $totalkebuthan = floatval($realisasi['bom_quantity'] * $realisasi['so_qty_order']);
 
 if($_SERVER["REQUEST_METHOD"] == "POST"){
-  $nospk = $no_spk;
-  $soid= $id;
   $quantity = trim(htmlspecialchars($_POST['quantity']));
   $realisasi = trim(htmlspecialchars($_POST['realisasi']));
   $ba = trim(htmlspecialchars($_POST['ba']));
@@ -31,7 +29,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     header('Location: realisasi-detail.php?' . $_SERVER['QUERY_STRING'] . '&pesan=validasi');
     exit();
   } else {
-    mysqli_query($conn, "UPDATE so JOIN bom ON bom.bom_id = so.so_bom_id SET so_realisasi = $realisasi, so_tanggal = '$tanggal', so_ba = $ba WHERE so.so_no_po = '$nopo' AND bom.bom_item_id = '$itemid' AND bom.bom_material_id = '$materialid'");
+    mysqli_query($conn, "UPDATE so JOIN bom ON bom.bom_id = so.so_bom_id SET so_realisasi = $realisasi, so_tanggal = '$tanggal', so_ba = $ba WHERE so.so_id = $soid AND so.so_no_po = '$nopo' AND bom.bom_item_id = '$itemid' AND bom.bom_material_id = '$materialid'");
     if(mysqli_affected_rows($conn) > 0){
       header('Location: realisasi-detail.php?' . $_SERVER['QUERY_STRING'] . '&pesan=ubah');
       exit();

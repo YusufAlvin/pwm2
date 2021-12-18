@@ -8,25 +8,16 @@ if($_SESSION['login'] != true){
 	exit();
 }
 
-$soprojects = $_GET['projects'];
-$itemid = $_GET['itemid'];
-$divisi = $_GET['divisi'];
+extract($_GET);
 
-if($divisi == "" || $soprojects == "" || $itemid == ""){
+if($divisi == "" || $projects == "" || $itemid == ""){
 	header('Location: export-filter.php?pesan=fieldkosong');
 	exit();
 }
 
-$queryso = mysqli_query($conn, "SELECT * FROM so INNER JOIN item ON item.item_id = so.so_item_id INNER JOIN material ON material.material_id = so.so_material_id INNER JOIN divisi ON divisi.divisi_id = so.so_divisi_id WHERE so_no_spk = '$soprojects' AND so_divisi_id = $divisi AND so_item_id = '$itemid'");
-$queryso2 = mysqli_query($conn, "SELECT * FROM so INNER JOIN item ON item.item_id = so.so_item_id INNER JOIN material ON material.material_id = so.so_material_id INNER JOIN divisi ON divisi.divisi_id = so.so_divisi_id WHERE so_no_spk = '$soprojects' AND so_divisi_id = $divisi AND so_item_id = '$itemid'");
+$queryso = mysqli_query($conn, "SELECT so.so_no_po, so.so_qty_order, so.so_lot_number, item.item_id, item.item_nama, material.material_id, material.material_nama, uom.uom_nama, bom.bom_quantity, divisi.divisi_nama FROM so JOIN bom ON bom.bom_id = so.so_bom_id JOIN item ON item.item_id = bom.bom_item_id JOIN divisi ON divisi.divisi_id = bom.bom_divisi_id JOIN material ON material.material_id = bom.bom_material_id JOIN uom ON uom.uom_id = material.material_uom_id WHERE so.so_no_po = '$projects' AND bom.bom_divisi_id = $divisi AND item.item_id = '$itemid'");
 
-// if($itemid == ""){
-// 	$queryso = mysqli_query($conn, "SELECT * FROM so INNER JOIN item ON item.item_id = so.so_item_id INNER JOIN material ON material.material_id = so.so_material_id INNER JOIN divisi ON divisi.divisi_id = so.so_divisi_id WHERE so_no_spk = '$soprojects' AND so_divisi_id = $divisi");
-// 	$queryso2 = mysqli_query($conn, "SELECT * FROM so INNER JOIN item ON item.item_id = so.so_item_id INNER JOIN material ON material.material_id = so.so_material_id INNER JOIN divisi ON divisi.divisi_id = so.so_divisi_id WHERE so_no_spk = '$soprojects' AND so_divisi_id = $divisi");
-// } elseif ($itemid != ""){
-// 	$queryso = mysqli_query($conn, "SELECT * FROM so INNER JOIN item ON item.item_id = so.so_item_id INNER JOIN material ON material.material_id = so.so_material_id INNER JOIN divisi ON divisi.divisi_id = so.so_divisi_id WHERE so_no_spk = '$soprojects' AND so_divisi_id = $divisi AND so_item_id = '$itemid'");
-// 	$queryso2 = mysqli_query($conn, "SELECT * FROM so INNER JOIN item ON item.item_id = so.so_item_id INNER JOIN material ON material.material_id = so.so_material_id INNER JOIN divisi ON divisi.divisi_id = so.so_divisi_id WHERE so_no_spk = '$soprojects' AND so_divisi_id = $divisi AND so_item_id = '$itemid'");
-// }
+$queryso2 = mysqli_query($conn, "SELECT so.so_no_po, so.so_qty_order, so.so_lot_number, item.item_id, item.item_nama, material.material_id, material.material_nama, uom.uom_nama, bom.bom_quantity, divisi.divisi_nama FROM so JOIN bom ON bom.bom_id = so.so_bom_id JOIN item ON item.item_id = bom.bom_item_id JOIN divisi ON divisi.divisi_id = bom.bom_divisi_id JOIN material ON material.material_id = bom.bom_material_id JOIN uom ON uom.uom_id = material.material_uom_id WHERE so.so_no_po = '$projects' AND bom.bom_divisi_id = $divisi AND item.item_id = '$itemid'");
 
 if(mysqli_num_rows($queryso) < 1 && mysqli_num_rows($queryso2) < 1){
 	header('Location: export-filter.php?pesan=datakosong');
@@ -102,7 +93,7 @@ ob_start();
 		</tr>
 		<tr>
 			<td class="menu">LotNbr / SO</td>
-			<td class="semicolon">: <?php echo $so2['so_lot_number']. " / " . $so2['so_no_spk'] ?></td>
+			<td class="semicolon">: <?php echo $so2['so_lot_number']. " / " . $so2['so_no_po'] ?></td>
 		</tr>
 		<tr>
 			<td class="menu">Qty Order</td>
@@ -128,11 +119,11 @@ ob_start();
 		<tr>
 			<td><?= $so['material_id']; ?></td>
 			<td><?= $so['material_nama']; ?></td>
-			<td class="center"><?= $so['so_material_qty']; ?></td>
-			<td class="center"><?= $so['material_uom']; ?></td>
-			<td class="center"><?= $so['so_total_kebutuhan']; ?></td>
-			<td><?= $so['so_realisasi']; ?></td>
-			<td><?= $so['so_realisasi']; ?></td>
+			<td class="center"><?= $so['bom_quantity']; ?></td>
+			<td class="center"><?= $so['uom_nama']; ?></td>
+			<td class="center"><?= floatval($so['bom_quantity'] * $so['so_qty_order']) ?></td>
+			<td></td>
+			<td></td>
 		</tr>
 		<?php endwhile; ?>
 	</table>

@@ -11,9 +11,7 @@ if($_SESSION['login'] != true){
   exit();
 }
 
-$itemid = $_GET['itemid'];
-$tanggalawal = $_GET['tanggalawal'];
-$tanggalakhir = $_GET['tanggalakhir'];
+extract($_GET);
 
 $spreadsheet = new Spreadsheet();
 $active_sheet = $spreadsheet->getActiveSheet();
@@ -23,7 +21,7 @@ $no = 1;
 
 
 if($itemid != "" && $tanggalawal == "" && $tanggalakhir == ""){
-  $queryitem = mysqli_query($conn, "SELECT * FROM realisasi JOIN item ON item.item_id = realisasi.so_item_id JOIN material ON material.material_id = realisasi.so_material_id JOIN divisi ON divisi.divisi_id = realisasi.so_divisi_id WHERE realisasi.so_item_id = '$itemid'");
+  $queryitem = mysqli_query($conn, "SELECT * FROM so JOIN bom ON bom.bom_id = so.so_bom_id JOIN item ON item.item_id = bom.bom_item_id JOIN divisi ON divisi.divisi_id = bom.bom_divisi_id JOIN material ON material.material_id = bom.bom_material_id JOIN uom ON uom.uom_id = material.material_uom_id WHERE item.item_id = '$itemid'");
 
   if(mysqli_num_rows($queryitem) < 1){
     header('Location: export-so-excel.php?pesan=datakosong');
@@ -31,7 +29,7 @@ if($itemid != "" && $tanggalawal == "" && $tanggalakhir == ""){
   }
 } 
 elseif($itemid == "" && $tanggalawal != "" && $tanggalakhir != "") {
-  $queryitem = mysqli_query($conn, "SELECT * FROM realisasi JOIN item ON item.item_id = realisasi.so_item_id JOIN material ON material.material_id = realisasi.so_material_id JOIN divisi ON divisi.divisi_id = realisasi.so_divisi_id WHERE realisasi.so_tanggal BETWEEN '$tanggalawal' AND '$tanggalakhir'");
+  $queryitem = mysqli_query($conn, "SELECT * FROM so JOIN bom ON bom.bom_id = so.so_bom_id JOIN item ON item.item_id = bom.bom_item_id JOIN divisi ON divisi.divisi_id = bom.bom_divisi_id JOIN material ON material.material_id = bom.bom_material_id JOIN uom ON uom.uom_id = material.material_uom_id WHERE so.so_tanggal BETWEEN '$tanggalawal' AND '$tanggalakhir'");
 
   if(mysqli_num_rows($queryitem) < 1){
     header('Location: export-so-excel.php?pesan=datakosong');
@@ -39,7 +37,7 @@ elseif($itemid == "" && $tanggalawal != "" && $tanggalakhir != "") {
   }
 } 
 elseif ($itemid != "" && $tanggalawal != "" && $tanggalakhir != ""){
-  $queryitem = mysqli_query($conn, "SELECT * FROM realisasi JOIN item ON item.item_id = realisasi.so_item_id JOIN material ON material.material_id = realisasi.so_material_id JOIN divisi ON divisi.divisi_id = realisasi.so_divisi_id WHERE (realisasi.so_tanggal BETWEEN '$tanggalawal' AND '$tanggalakhir') AND realisasi.so_item_id = '$itemid'");
+  $queryitem = mysqli_query($conn, "SELECT * FROM so JOIN bom ON bom.bom_id = so.so_bom_id JOIN item ON item.item_id = bom.bom_item_id JOIN divisi ON divisi.divisi_id = bom.bom_divisi_id JOIN material ON material.material_id = bom.bom_material_id JOIN uom ON uom.uom_id = material.material_uom_id WHERE (so.so_tanggal BETWEEN '$tanggalawal' AND '$tanggalakhir') AND bom.bom_item_id = '$itemid'");
 
   if(mysqli_num_rows($queryitem) < 1){
     header('Location: export-so-excel.php?pesan=datakosong');
@@ -47,7 +45,7 @@ elseif ($itemid != "" && $tanggalawal != "" && $tanggalakhir != ""){
   }
 }
 elseif ($itemid == "" && $tanggalawal != "" && $tanggalakhir == ""){
-  $queryitem = mysqli_query($conn, "SELECT * FROM realisasi JOIN item ON item.item_id = realisasi.so_item_id JOIN material ON material.material_id = realisasi.so_material_id JOIN divisi ON divisi.divisi_id = realisasi.so_divisi_id WHERE realisasi.so_tanggal = '$tanggalawal'");
+  $queryitem = mysqli_query($conn, "SELECT * FROM so JOIN bom ON bom.bom_id = so.so_bom_id JOIN item ON item.item_id = bom.bom_item_id JOIN divisi ON divisi.divisi_id = bom.bom_divisi_id JOIN material ON material.material_id = bom.bom_material_id JOIN uom ON uom.uom_id = material.material_uom_id WHERE so.so_tanggal = '$tanggalawal'");
 
   if(mysqli_num_rows($queryitem) < 1){
     header('Location: export-so-excel.php?pesan=datakosong');
@@ -63,10 +61,6 @@ elseif ($tanggalakhir != "" && $tanggalawal == ""){
   exit();
 }
 
-while($item = mysqli_fetch_assoc($queryitem)){
-  $jmlqtyorder += $item['so_qty_order'];
-}
-
 $active_sheet = $spreadsheet->getActiveSheet();
 
   $active_sheet->setCellValue('A1', 'No');
@@ -77,28 +71,38 @@ $active_sheet = $spreadsheet->getActiveSheet();
   $active_sheet->setCellValue('F1', 'Item Nama');
   $active_sheet->setCellValue('G1', 'Material Code');
   $active_sheet->setCellValue('H1', 'Material Nama');
-  $active_sheet->setCellValue('I1', 'UoM');
-  $active_sheet->setCellValue('J1', 'Material Quantity');  
-  $active_sheet->setCellValue('K1', 'Divisi');
-  $active_sheet->setCellValue('L1', 'Total Kebutuhan');
-  $active_sheet->setCellValue('M1', 'Realisasi');
-  $active_sheet->setCellValue('N1', 'Tanggal');
+  $active_sheet->setCellValue('I1', 'Material Harga');
+  $active_sheet->setCellValue('J1', 'UoM');
+  $active_sheet->setCellValue('K1', 'Material Quantity');  
+  $active_sheet->setCellValue('L1', 'Divisi');
+  $active_sheet->setCellValue('M1', 'Total Kebutuhan');
+  $active_sheet->setCellValue('N1', 'Realisasi');
+  $active_sheet->setCellValue('O1', 'BA');
+  $active_sheet->setCellValue('P1', 'Tanggal');
+  $active_sheet->setCellValue('Q1', 'Total Harga');
 
   while($item = mysqli_fetch_assoc($queryitem)){
+    $totalkebuthan = floatval($item['bom_quantity'] * $item['so_qty_order']);
+    $totalharga  = number_format($item['so_realisasi'] * $item['material_harga'], 0, ".", ".");
+
     $active_sheet->setCellValue('A'.$count, $no++);
-    $active_sheet->setCellValue('B'.$count, $item['so_no_spk']);
+    $active_sheet->setCellValue('B'.$count, $item['so_no_po']);
     $active_sheet->setCellValue('C'.$count, $item['item_id']);
     $active_sheet->setCellValue('D'.$count, $item['so_lot_number']);
     $active_sheet->setCellValue('E'.$count, $item['so_qty_order']);
     $active_sheet->setCellValue('F'.$count, $item['item_nama']);
     $active_sheet->setCellValue('G'.$count, $item['material_id']);
     $active_sheet->setCellValue('H'.$count, $item['material_nama']);
-    $active_sheet->setCellValue('I'.$count, $item['material_uom']);  
-    $active_sheet->setCellValue('J'.$count, $item['so_material_qty']);
-    $active_sheet->setCellValue('K'.$count, $item['divisi_nama']);
-    $active_sheet->setCellValue('L'.$count, $item['so_total_kebutuhan']);
-    $active_sheet->setCellValue('M'.$count, $item['so_realisasi']);
-    $active_sheet->setCellValue('N'.$count, $item['so_tanggal']);
+    $active_sheet->setCellValue('I'.$count, $item['material_harga']);
+    $active_sheet->setCellValue('J'.$count, $item['uom_nama']);  
+    $active_sheet->setCellValue('K'.$count, $item['bom_quantity']);
+    $active_sheet->setCellValue('L'.$count, $item['divisi_nama']);
+    $active_sheet->setCellValue('M'.$count, $totalkebuthan);
+    $active_sheet->setCellValue('N'.$count, $item['so_realisasi']);
+    $active_sheet->setCellValue('O'.$count, $item['so_ba']);
+    $active_sheet->setCellValue('P'.$count, $item['so_tanggal']);
+    $active_sheet->setCellValue('Q'.$count, $totalharga);
+
 
     $count++;
   }

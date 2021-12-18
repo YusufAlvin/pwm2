@@ -5,9 +5,9 @@ if($_SESSION['login'] != true){
   header('Location: ../');
   exit();
 }
-$queryso = mysqli_query($conn, "SELECT DISTINCT so_no_spk FROM so");
-$queryitem = mysqli_query($conn, "SELECT DISTINCT so_item_id FROM so");
-$querydivisi = mysqli_query($conn, "SELECT * FROM divisi");
+$queryso = mysqli_query($conn, "SELECT DISTINCT so_no_po FROM so");
+$queryitem = mysqli_query($conn, "SELECT DISTINCT bom_item_id FROM bom");
+$querydivisi = mysqli_query($conn, "SELECT divisi_id, divisi_nama FROM divisi");
 ?>
 <?php require_once "template/header.php"; ?>
 
@@ -57,25 +57,19 @@ $querydivisi = mysqli_query($conn, "SELECT * FROM divisi");
                   <select name="projects" class="form-select form-control mb-3" aria-label="Default select example">
                     <option value="" selected>No PO</option>
                     <?php while ($so = mysqli_fetch_assoc($queryso)) : ?>
-                      <a href="export.php?projects=" <?= $so['so_no_spk']; ?>>
-                          <option value="<?= $so['so_no_spk']; ?>"><?= $so['so_no_spk']; ?></option>
-                      </a>
+                    <option value="<?= $so['so_no_po']; ?>"><?= $so['so_no_po']; ?></option>
                     <?php endwhile; ?>
                   </select>
                   <select name="itemid" class="form-select form-control mb-3" aria-label="Default select example">
                     <option value="" selected>Item Code</option>
                     <?php while ($item = mysqli_fetch_assoc($queryitem)) : ?>
-                      <a href="export.php?itemid=" <?= $item['so_item_id']; ?>>
-                          <option value="<?= $item['so_item_id']; ?>"><?= $item['so_item_id']; ?></option>
-                      </a>
+                    <option value="<?= $item['bom_item_id']; ?>"><?= $item['bom_item_id']; ?></option>
                     <?php endwhile; ?>
                   </select>
                   <select name="divisi" class="form-select form-control mb-3" aria-label="Default select example">
                     <option value="" selected>Divisi</option>
                     <?php while ($divisi = mysqli_fetch_assoc($querydivisi)) : ?>
-                      <a href="export.php?divisi=" <?= $divisi['divisi_id']; ?>>
-                          <option value="<?= $divisi['divisi_id']; ?>"><?= $divisi['divisi_nama']; ?></option>
-                      </a>
+                    <option value="<?= $divisi['divisi_id']; ?>"><?= $divisi['divisi_nama']; ?></option>
                     <?php endwhile; ?>
                   </select>
                   <button name='export' type="submit" class="btn btn-primary">Export</button>

@@ -5,7 +5,7 @@
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
-        'reference' => '7fef457c3344c9e1a87e00edccd9376ff225bcf3',
+        'reference' => 'e7d20014afe70876e0694a5e0d19c5756cbfdaec',
         'name' => 'project/pwm',
         'dev' => true,
     ),
@@ -100,7 +100,7 @@
             'type' => 'library',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
-            'reference' => '7fef457c3344c9e1a87e00edccd9376ff225bcf3',
+            'reference' => 'e7d20014afe70876e0694a5e0d19c5756cbfdaec',
             'dev_requirement' => false,
         ),
         'psr/http-client' => array(

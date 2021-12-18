@@ -8,7 +8,7 @@ if($_SESSION['login'] != true){
 
 extract($_GET);
 
-$query = mysqli_query($conn, "SELECT item.item_id, material.material_id, material.material_nama, so.so_no_po, so.so_lot_number, bom.bom_quantity, so.so_realisasi, so.so_tanggal, so.so_ba, so.so_qty_order, uom.uom_nama, divisi.divisi_nama FROM so JOIN bom ON bom.bom_id = so.so_bom_id JOIN item ON item.item_id = bom.bom_item_id JOIN divisi ON divisi.divisi_id = bom.bom_divisi_id JOIN material ON material.material_id = bom.bom_material_id JOIN uom ON uom.uom_id = material.material_uom_id WHERE so.so_no_po = '$nopo' AND item.item_id = '$itemid'");
+$query = mysqli_query($conn, "SELECT item.item_id, material.material_id, material.material_nama, so.so_id, so.so_no_po, so.so_lot_number, bom.bom_quantity, so.so_realisasi, so.so_tanggal, so.so_ba, so.so_qty_order, uom.uom_nama, divisi.divisi_nama FROM so JOIN bom ON bom.bom_id = so.so_bom_id JOIN item ON item.item_id = bom.bom_item_id JOIN divisi ON divisi.divisi_id = bom.bom_divisi_id JOIN material ON material.material_id = bom.bom_material_id JOIN uom ON uom.uom_id = material.material_uom_id WHERE so.so_no_po = '$nopo' AND item.item_id = '$itemid'");
 ?>
 <?php require_once "template/header.php"; ?>
 
@@ -91,7 +91,7 @@ $query = mysqli_query($conn, "SELECT item.item_id, material.material_id, materia
                           <td><?= $so['so_ba']; ?></td>
                           <td><?= $so['so_tanggal']; ?></td>
                           <td>
-                          <a href="realisasi-detail-edit.php?nopo=<?= $so['so_no_po']; ?>&itemid=<?= $so['item_id']; ?>&materialid=<?= $so['material_id']; ?>"><span class="badge rounded-pill bg-success">Edit</span></a>
+                          <a href="realisasi-detail-edit.php?nopo=<?= $so['so_no_po']; ?>&itemid=<?= $so['item_id']; ?>&materialid=<?= $so['material_id']; ?>&soid=<?= $so['so_id']; ?>"><span class="badge rounded-pill bg-success">Edit</span></a>
                           </td>
                       </tr> 
                     <?php endwhile; ?>                     
