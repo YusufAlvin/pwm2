@@ -1,0 +1,12 @@
+{
+    "name": "project/pwm",
+    "autoload": {
+        "psr-4": {
+            "Project\\Pwm\\": "src/"
+        }
+    },
+    "require": {
+        "phpoffice/phpspreadsheet": "^1.20",
+        "mpdf/mpdf": "^8.0"
+    }
+}
