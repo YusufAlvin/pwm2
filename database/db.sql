@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 18, 2021 at 01:32 AM
+-- Generation Time: Dec 18, 2021 at 03:25 AM
 -- Server version: 10.4.21-MariaDB
 -- PHP Version: 8.0.12
 
@@ -63,7 +63,8 @@ INSERT INTO `bom` (`bom_id`, `bom_item_id`, `bom_material_id`, `bom_quantity`, `
 (7, 'item1', 'material2', 0.6, 2),
 (8, 'item1', 'material3', 0.7, 3),
 (9, 'item1', 'material1', 0.9, 2),
-(10, 'item1', 'material2', 0.89, 1);
+(10, 'item1', 'material2', 0.89, 1),
+(13, 'item2', 'material2', 0.1, 3);
 
 -- --------------------------------------------------------
 
@@ -154,14 +155,16 @@ CREATE TABLE `so` (
 --
 
 INSERT INTO `so` (`so_id`, `so_no_po`, `so_bom_id`, `so_qty_order`, `so_lot_number`, `so_realisasi`, `so_ba`, `so_tanggal`) VALUES
-(23, 'PO1', 7, 2000, 'sft', 0, 0, '0000-00-00'),
-(24, 'PO1', 8, 2000, 'sft', 0, 0, '0000-00-00'),
-(25, 'PO1', 9, 2000, 'sft', 1400, 1499, '2021-12-18'),
-(26, 'PO1', 10, 2000, 'sft', 0, 0, '0000-00-00'),
-(28, 'PO2', 7, 3000, 'sft', 0, 0, '0000-00-00'),
-(29, 'PO2', 8, 3000, 'sft', 0, 0, '0000-00-00'),
-(30, 'PO2', 9, 3000, 'sft', 2699, 2799, '2021-12-18'),
-(31, 'PO2', 10, 3000, 'sft', 0, 0, '0000-00-00');
+(23, 'PO1', 7, 2500, 'sft', 1200, 1200, '2021-12-01'),
+(24, 'PO1', 8, 2500, 'sft', 100, 100, '2021-12-17'),
+(25, 'PO1', 9, 2500, 'sft', 1400, 1499, '2021-12-18'),
+(26, 'PO1', 10, 2500, 'sft', 1000, 2000, '2021-12-18'),
+(28, 'PO2', 7, 300, 'sft', 200, 300, '2021-12-18'),
+(29, 'PO2', 8, 300, 'sft', 0, 0, '0000-00-00'),
+(30, 'PO2', 9, 300, 'sft', 2699, 2799, '2021-12-18'),
+(31, 'PO2', 10, 300, 'sft', 200, 300, '2021-12-31'),
+(32, 'PO1', 13, 3000, 'sft', 300, 200, '2021-12-18'),
+(33, 'PO2', 13, 1200, 'sft', 0, 0, '0000-00-00');
 
 -- --------------------------------------------------------
 
@@ -255,7 +258,7 @@ ALTER TABLE `admin`
 -- AUTO_INCREMENT for table `bom`
 --
 ALTER TABLE `bom`
-  MODIFY `bom_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `bom_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT for table `divisi`
@@ -267,7 +270,7 @@ ALTER TABLE `divisi`
 -- AUTO_INCREMENT for table `so`
 --
 ALTER TABLE `so`
-  MODIFY `so_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
+  MODIFY `so_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
 
 --
 -- AUTO_INCREMENT for table `uom`
