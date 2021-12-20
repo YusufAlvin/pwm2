@@ -24,27 +24,32 @@ $item_code = mysqli_fetch_assoc($query_item_code);
     <div class="content-header">
       <div class="container-fluid">
         <div class="row mb-2">
-          <div class="col-sm-6">
-            <h1 class="m-0">Material Item Code <?= $id ?></h1>
-            <?php if(isset($_GET['pesan'])) : ?>
-              <?php if($_GET['pesan'] == 'ubah') : ?>
-                  <div class="alert alert-success alert-dismissible fade show mt-3" role="alert">
-                    Data berhasil diubah
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                      <span aria-hidden="true">&times;</span>
-                    </button>
-                  </div>
-                <?php elseif($_GET['pesan'] == 'delete') : ?>
-                  <div class="alert alert-success alert-dismissible fade show mt-3" role="alert">
-                    Data berhasil dihapus
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                      <span aria-hidden="true">&times;</span>
-                    </button>
-                  </div>
-              <?php endif; ?>    
-            <?php endif; ?>
+          <div class="col-md">
+            <h1 class="m-0">Material Item Code <strong><?= $id ?></strong></h1>
           </div>
-        </div><!-- /.row -->
+        </div>
+        <div class="row">
+          <div class="col-md-6">
+          <?php if(isset($_GET['pesan'])) : ?>
+            <?php if($_GET['pesan'] == 'ubah') : ?>
+                <div class="alert alert-success alert-dismissible fade show mt-3" role="alert">
+                  Data berhasil diubah
+                  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+              <?php elseif($_GET['pesan'] == 'delete') : ?>
+                <div class="alert alert-success alert-dismissible fade show mt-3" role="alert">
+                  Data berhasil dihapus
+                  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+            <?php endif; ?>    
+          <?php endif; ?>
+          </div>
+        </div>
+        <!-- /.row -->
       </div><!-- /.container-fluid -->
     </div>
 
