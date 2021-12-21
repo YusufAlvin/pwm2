@@ -14,7 +14,7 @@ if($nopo == "" || $itemid == "" || $materialid == ""){
   exit();
 }
 
-$queryrealisasi = mysqli_query($conn, "SELECT so.so_qty_order, bom.bom_quantity, so.so_realisasi, so.so_ba, so.so_tanggal FROM so JOIN bom ON bom.bom_id = so.so_bom_id JOIN item ON item.item_id = bom.bom_item_id JOIN divisi ON divisi.divisi_id = bom.bom_divisi_id JOIN material ON material.material_id = bom.bom_material_id JOIN uom ON uom.uom_id = material.material_uom_id WHERE so.so_no_po = '$nopo' AND bom.bom_item_id = '$itemid' AND bom.bom_material_id = '$materialid'");
+$queryrealisasi = mysqli_query($conn, "SELECT so.so_qty_order, bom.bom_quantity, so.so_realisasi, so.so_ba, so.so_tanggal FROM so JOIN bom ON bom.bom_id = so.so_bom_id JOIN item ON item.item_id = bom.bom_item_id JOIN divisi ON divisi.divisi_id = bom.bom_divisi_id JOIN material ON material.material_id = bom.bom_material_id JOIN uom ON uom.uom_id = material.material_uom_id WHERE so.so_id = $soid");
 
 $realisasi = mysqli_fetch_assoc($queryrealisasi);
 $totalkebuthan = floatval($realisasi['bom_quantity'] * $realisasi['so_qty_order']);

@@ -25,6 +25,8 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
   $new_divisi = [];
   $lastid = [];
 
+  $querynopo =  mysqli_query($conn, "SELECT DISTINCT so_no_po, so_qty_order, so_lot_number FROM so JOIN bom ON bom.bom_id = so.so_bom_id WHERE bom.bom_item_id = '$item'");
+
   if(count($material) == 0 || $item == "" || count($divisi) == 0 || count($quantity) == 0){
     echo "<script>alert('Isi kolom item, material, quantity, divisi');location.href='bom-add.php'</script>";
     exit();
@@ -54,15 +56,14 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     array_push($lastid, mysqli_insert_id($conn));
   }
 
-  $querynopo =  mysqli_query($conn, "SELECT DISTINCT so_no_po, so_qty_order, so_lot_number FROM so JOIN bom ON bom.bom_id = so.so_bom_id WHERE bom.bom_item_id = '$item'");
-  if(mysqli_num_rows($querynopo) > 0){
+  if(mysqli_num_rows($querynopo) != 0){
     while($nopo = mysqli_fetch_assoc($querynopo)){
       foreach ($lastid as $id) {
         mysqli_query($conn, "INSERT INTO so (so_no_po, so_bom_id, so_qty_order, so_lot_number) VALUE ('$nopo[so_no_po]', $id, $nopo[so_qty_order], '$nopo[so_lot_number]')");
       }
     }
-  }
-  
+  } 
+
   if(mysqli_affected_rows($conn) > 0){
     header('Location: bom.php?pesan=sukses');
   } else {
