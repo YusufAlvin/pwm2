@@ -71,19 +71,23 @@ $active_sheet = $spreadsheet->getActiveSheet();
   $active_sheet->setCellValue('F1', 'Item Nama');
   $active_sheet->setCellValue('G1', 'Material Code');
   $active_sheet->setCellValue('H1', 'Material Nama');
-  $active_sheet->setCellValue('I1', 'Material Harga');
-  $active_sheet->setCellValue('J1', 'UoM');
-  $active_sheet->setCellValue('K1', 'Material Quantity');  
-  $active_sheet->setCellValue('L1', 'Divisi');
-  $active_sheet->setCellValue('M1', 'Total Kebutuhan');
-  $active_sheet->setCellValue('N1', 'Realisasi');
-  $active_sheet->setCellValue('O1', 'BA');
-  $active_sheet->setCellValue('P1', 'Tanggal');
-  $active_sheet->setCellValue('Q1', 'Total Harga');
+  $active_sheet->setCellValue('I1', 'UoM');
+  $active_sheet->setCellValue('J1', 'Harga'); 
+  $active_sheet->setCellValue('K1', 'Divisi');
+  $active_sheet->setCellValue('L1', 'BOM');
+  $active_sheet->setCellValue('M1', 'Hasil BOM');
+  $active_sheet->setCellValue('N1', 'Aktual');
+  $active_sheet->setCellValue('O1', 'Hasil Aktual');
+  $active_sheet->setCellValue('P1', 'Balance');
+  $active_sheet->setCellValue('Q1', 'Hasil Balance');
 
   while($item = mysqli_fetch_assoc($queryitem)){
-    $totalkebuthan = floatval($item['bom_quantity'] * $item['so_qty_order']);
-    $totalharga  = number_format($item['so_realisasi'] * $item['material_harga'], 0, ".", ".");
+    $bom = $item['bom_quantity'] * $item['so_qty_order'];
+    $hasilbom  = $bom * $item['material_harga'];
+    $aktual = $item['so_realisasi'] + $item['so_ba'];
+    $hasilaktual = $aktual * $item['material_harga'];
+    $balance = $bom - $aktual;
+    $hasilbalance = $balance * $item['material_harga'];
 
     $active_sheet->setCellValue('A'.$count, $no++);
     $active_sheet->setCellValue('B'.$count, $item['so_no_po']);
@@ -93,16 +97,15 @@ $active_sheet = $spreadsheet->getActiveSheet();
     $active_sheet->setCellValue('F'.$count, $item['item_nama']);
     $active_sheet->setCellValue('G'.$count, $item['material_id']);
     $active_sheet->setCellValue('H'.$count, $item['material_nama']);
-    $active_sheet->setCellValue('I'.$count, $item['material_harga']);
-    $active_sheet->setCellValue('J'.$count, $item['uom_nama']);  
-    $active_sheet->setCellValue('K'.$count, $item['bom_quantity']);
-    $active_sheet->setCellValue('L'.$count, $item['divisi_nama']);
-    $active_sheet->setCellValue('M'.$count, $totalkebuthan);
-    $active_sheet->setCellValue('N'.$count, $item['so_realisasi']);
-    $active_sheet->setCellValue('O'.$count, $item['so_ba']);
-    $active_sheet->setCellValue('P'.$count, $item['so_tanggal']);
-    $active_sheet->setCellValue('Q'.$count, $totalharga);
-
+    $active_sheet->setCellValue('I'.$count, $item['uom_nama']);
+    $active_sheet->setCellValue('J'.$count, $item['material_harga']); 
+    $active_sheet->setCellValue('K'.$count, $item['divisi_nama']);
+    $active_sheet->setCellValue('L'.$count, $bom);
+    $active_sheet->setCellValue('M'.$count, $hasilbom);
+    $active_sheet->setCellValue('N'.$count, $aktual);
+    $active_sheet->setCellValue('O'.$count, $hasilaktual);
+    $active_sheet->setCellValue('P'.$count, $balance);
+    $active_sheet->setCellValue('Q'.$count, $hasilbalance);
 
     $count++;
   }
