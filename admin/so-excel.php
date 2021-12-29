@@ -69,6 +69,14 @@ elseif ($nopo != "" && $itemid != "" && $tanggalawal == "" && $tanggalakhir == "
   }
 }
 elseif ($nopo != "" && $itemid != "" && $tanggalawal != "" && $tanggalakhir != ""){
+  $queryitem = mysqli_query($conn, "SELECT * FROM so JOIN bom ON bom.bom_id = so.so_bom_id JOIN item ON item.item_id = bom.bom_item_id JOIN divisi ON divisi.divisi_id = bom.bom_divisi_id JOIN material ON material.material_id = bom.bom_material_id JOIN uom ON uom.uom_id = material.material_uom_id WHERE so.so_no_po = '$nopo' AND (so.so_tanggal BETWEEN '$tanggalawal' AND '$tanggalakhir')");
+
+  if(mysqli_num_rows($queryitem) < 1){
+    header('Location: export-so-excel.php?pesan=datakosong');
+    exit();
+  }
+}
+elseif ($nopo != "" && $itemid == "" && $tanggalawal != "" && $tanggalakhir != ""){
   $queryitem = mysqli_query($conn, "SELECT * FROM so JOIN bom ON bom.bom_id = so.so_bom_id JOIN item ON item.item_id = bom.bom_item_id JOIN divisi ON divisi.divisi_id = bom.bom_divisi_id JOIN material ON material.material_id = bom.bom_material_id JOIN uom ON uom.uom_id = material.material_uom_id WHERE so.so_no_po = '$nopo' AND item.item_id = '$itemid' AND (so.so_tanggal BETWEEN '$tanggalawal' AND '$tanggalakhir')");
 
   if(mysqli_num_rows($queryitem) < 1){

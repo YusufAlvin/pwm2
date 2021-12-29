@@ -79,6 +79,9 @@ $query = mysqli_query($conn, "SELECT DISTINCT so.so_no_po, item.item_id, item.it
             <a href="export-so-excel.php">
               <button class="btn btn-primary">Export Excel</button>
             </a>
+            <a href="export-so-excel2.php">
+              <button class="btn btn-primary">Export Excel PO</button>
+            </a>
           </div>
         </div>
         <div class="row">
