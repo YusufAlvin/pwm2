@@ -8,7 +8,8 @@ if($_SESSION['login'] != true){
   exit();
 }
 
-$queryitemcode = mysqli_query($conn, "SELECT DISTINCT so_no_po FROM so");
+$queryitemcode = mysqli_query($conn, "SELECT DISTINCT bom_item_id FROM bom");
+$querynopo = mysqli_query($conn, "SELECT DISTINCT so_no_po FROM so");
 
 ?>
 <?php require_once "template/header.php"; ?>
@@ -68,10 +69,25 @@ $queryitemcode = mysqli_query($conn, "SELECT DISTINCT so_no_po FROM so");
                     <label for="nopo">No PO</label>
                     <select name="nopo" class="form-select form-control mb-3" aria-label="Default select example">
                       <option value="" selected>No PO</option>
-                      <?php while ($item = mysqli_fetch_assoc($queryitemcode)) : ?>
-                      <option value="<?= $item['so_no_po']; ?>"><?= $item['so_no_po']; ?></option>
+                      <?php while ($nopo = mysqli_fetch_assoc($querynopo)) : ?>
+                      <option value="<?= $nopo['so_no_po']; ?>"><?= $nopo['so_no_po']; ?></option>
                       <?php endwhile; ?>
+                    </select>
+                  </div>
+                  <label for="itemcode">Item Code</label>
+                  <select name="itemid" class="form-select form-control mb-3" aria-label="Default select example">
+                    <option value="" selected>Item Code</option>
+                    <?php while ($item = mysqli_fetch_assoc($queryitemcode)) : ?>
+                    <option value="<?= $item['bom_item_id']; ?>"><?= $item['bom_item_id']; ?></option>
+                    <?php endwhile; ?>
                   </select>
+                  <div class="mb-3">
+                    <label for="tanggalawal">Tanggal Awal</label>
+                    <input name="tanggalawal" type="date" class="form-control" id="tanggalawal">
+                  </div> 
+                  <div class="mb-3">
+                    <label for="tanggalakhir">Tanggal Akhir</label>
+                    <input name="tanggalakhir" type="date" class="form-control" id="tanggalakhir">
                   </div>
                   <button name='export' type="submit" class="btn btn-primary">Export</button>
                 </form>
