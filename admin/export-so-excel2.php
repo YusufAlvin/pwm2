@@ -9,6 +9,7 @@ if($_SESSION['login'] != true){
 }
 
 $querynopo = mysqli_query($conn, "SELECT DISTINCT so_no_po FROM so");
+$querydivisi = mysqli_query($conn, "SELECT divisi_id, divisi_nama FROM divisi");
 
 ?>
 <?php require_once "template/header.php"; ?>
@@ -64,15 +65,37 @@ $querynopo = mysqli_query($conn, "SELECT DISTINCT so_no_po FROM so");
             <div class="card table-responsive">
               <div class="card-body">
                 <form action="so-excel2.php" method="GET">
-                <label for="">No PO</label>
+                  <label for="">No PO</label>
+                  <div class="overflow-auto" style="height: 50vh;">
                   <?php while($nopo = mysqli_fetch_assoc($querynopo)) :?>
-                    <div class="form-check">
-                      <input name="nopo[]" class="form-check-input" type="checkbox" value="<?= $nopo['so_no_po'] ?>" id="flexCheckDefault">
-                      <label class="form-check-label" for="flexCheckDefault">
-                        <?= $nopo['so_no_po'] ?>
-                      </label>
-                    </div>
-                  <?php endwhile; ?>
+                      <div class="form-check">
+                        <input name="nopo[]" class="form-check-input" type="checkbox" value="<?= $nopo['so_no_po'] ?>" id="flexCheckDefault">
+                        <label class="form-check-label" for="flexCheckDefault">
+                          <?= $nopo['so_no_po'] ?>
+                        </label>
+                      </div>
+                    <?php endwhile; ?>
+                  </div>
+                  <button name='export' type="submit" class="btn btn-primary mt-3">Export</button>
+                </form>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="card table-responsive">
+              <div class="card-body">
+                <form action="so-excel-divisi.php" method="GET">
+                  <label for="">Divisi</label>
+                  <div class="overflow-auto">
+                  <?php while($divisi = mysqli_fetch_assoc($querydivisi)) :?>
+                      <div class="form-check">
+                        <input name="divisi[]" class="form-check-input" type="checkbox" value="<?= $divisi['divisi_id'] ?>" id="flexCheckDefault">
+                        <label class="form-check-label" for="flexCheckDefault">
+                          <?= $divisi['divisi_nama'] ?>
+                        </label>
+                      </div>
+                    <?php endwhile; ?>
+                  </div>
                   <button name='export' type="submit" class="btn btn-primary mt-3">Export</button>
                 </form>
               </div>

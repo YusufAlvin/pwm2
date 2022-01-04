@@ -19,7 +19,7 @@ $count = 2;
 $no = 1;
 // $jmlqtyorder = 0;
 
-if($nopo == ""){
+if($divisi == ""){
   header('Location: export-so-excel2.php');
   exit();
 }
@@ -60,8 +60,8 @@ $table = "CREATE TABLE IF NOT EXISTS temp (
 
 mysqli_query($conn, $table);
 
-for ($i=0; $i < count($nopo); $i++) {
-  $queryitem = mysqli_query($conn, "SELECT * FROM so JOIN bom ON bom.bom_id = so.so_bom_id JOIN item ON item.item_id = bom.bom_item_id JOIN divisi ON divisi.divisi_id = bom.bom_divisi_id JOIN material ON material.material_id = bom.bom_material_id JOIN uom ON uom.uom_id = material.material_uom_id WHERE so.so_no_po = '$nopo[$i]'");
+for ($i=0; $i < count($divisi); $i++) {
+  $queryitem = mysqli_query($conn, "SELECT * FROM so JOIN bom ON bom.bom_id = so.so_bom_id JOIN item ON item.item_id = bom.bom_item_id JOIN divisi ON divisi.divisi_id = bom.bom_divisi_id JOIN material ON material.material_id = bom.bom_material_id JOIN uom ON uom.uom_id = material.material_uom_id WHERE divisi.divisi_id = $divisi[$i]");
 
   if(mysqli_num_rows($queryitem) < 1){
     header('Location: export-so-excel2.php?datakosong');
