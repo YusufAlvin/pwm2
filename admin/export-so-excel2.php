@@ -43,9 +43,9 @@ $querydivisi = mysqli_query($conn, "SELECT divisi_id, divisi_nama FROM divisi");
                   </button>
                 </div>   
               <?php endif; ?>
-              <?php if($_GET['pesan'] == 'tanggalakhirkosong') : ?>
+              <?php if($_GET['pesan'] == 'tanggalkosong') : ?>
                 <div class="alert alert-warning alert-dismissible fade show mt-3" role="alert">
-                  <strong>Isi kolom tanggal awal</strong>
+                  <strong>Isi kolom tanggal awal dan akhir</strong>
                   <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                   </button>
@@ -95,8 +95,16 @@ $querydivisi = mysqli_query($conn, "SELECT divisi_id, divisi_nama FROM divisi");
                         </label>
                       </div>
                     <?php endwhile; ?>
+                    <div class="mb-3">
+                      <label for="tanggalawal">Tanggal Awal</label>
+                      <input name="tanggalawal" type="date" class="form-control" id="tanggalawal">
+                    </div> 
+                    <div class="mb-3">
+                      <label for="tanggalakhir">Tanggal Akhir</label>
+                      <input name="tanggalakhir" type="date" class="form-control" id="tanggalakhir">
+                    </div>
                   </div>
-                  <button name='export' type="submit" class="btn btn-primary mt-3">Export</button>
+                  <button name='export' type="submit" class="btn btn-primary">Export</button>
                 </form>
               </div>
             </div>
