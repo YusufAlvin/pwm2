@@ -28,7 +28,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
   
   $query = mysqli_query($conn, "SELECT bom_id FROM bom WHERE bom_item_id = '$item'");
   while($datas = mysqli_fetch_assoc($query)){
-    mysqli_query($conn, "INSERT INTO so (so_no_po, so_bom_id, so_qty_order, so_lot_number) VALUES ('$no_spk', $datas[bom_id], $qty, '$lotnumber')");
+    mysqli_query($conn, "INSERT INTO so (so_no_po, so_bom_id, so_qty_order, so_lot_number, so_tanggal) VALUES ('$no_spk', $datas[bom_id], $qty, '$lotnumber', current_timestamp())");
   }
 
   if(mysqli_affected_rows($conn) > 0){

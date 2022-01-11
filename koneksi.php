@@ -3,7 +3,7 @@
 $servername = "localhost";
 $username = "root";
 $password = "";
-$database = "pwm";
+$database = "pwm2";
 
 // Create connection
 $conn = mysqli_connect($servername, $username, $password, $database);

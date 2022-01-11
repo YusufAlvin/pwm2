@@ -29,7 +29,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     header('Location: realisasi-detail.php?' . $_SERVER['QUERY_STRING'] . '&pesan=validasi');
     exit();
   } else {
-    mysqli_query($conn, "UPDATE so JOIN bom ON bom.bom_id = so.so_bom_id SET so_realisasi = $realisasi, so_tanggal = '$tanggal', so_ba = $ba WHERE so.so_id = $soid AND so.so_no_po = '$nopo' AND bom.bom_item_id = '$itemid' AND bom.bom_material_id = '$materialid'");
+    mysqli_query($conn, "UPDATE so JOIN bom ON bom.bom_id = so.so_bom_id SET so_realisasi = $realisasi, so_ba = $ba WHERE so.so_id = $soid AND so.so_no_po = '$nopo' AND bom.bom_item_id = '$itemid' AND bom.bom_material_id = '$materialid'");
     if(mysqli_affected_rows($conn) > 0){
       header('Location: realisasi-detail.php?' . $_SERVER['QUERY_STRING'] . '&pesan=ubah');
       exit();
@@ -81,11 +81,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                       <div class="mb-3">
                         <label for="ba" class="form-label">BA</label>
                         <input name="ba" type="text" class="form-control" id="ba" value="<?= $realisasi['so_ba'] ?>" required>
-                      </div> 
-                      <div class="mb-3">
-                        <label for="tanggal" class="form-label">Tanggal Input</label>
-                        <input name="tanggal" type="date" class="form-control" id="tanggal" value="<?= $realisasi['so_tanggal'] ?>" required>
-                      </div>                   
+                      </div>                  
                     </div>                  
                   </div>
                   <div class="row">
