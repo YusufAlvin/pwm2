@@ -67,6 +67,14 @@
             </p>
           </a>
         </li>
+        <li class="nav-item">
+          <a href="posting.php" class="nav-link">
+            <i class="nav-icon far fas fa-list-ul"></i>
+            <p>
+              Posting
+            </p>
+          </a>
+        </li>
       </ul>
     </nav>
     <!-- /.sidebar-menu -->

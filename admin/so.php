@@ -6,7 +6,14 @@ if($_SESSION['login'] != true){
   exit();
 }
 
-$query = mysqli_query($conn, "SELECT DISTINCT so.so_tanggal, so.so_no_po, item.item_id, item.item_nama, so.so_qty_order, so.so_lot_number FROM so JOIN bom ON bom.bom_id = so.so_bom_id JOIN item ON item.item_id = bom.bom_item_id JOIN divisi ON divisi.divisi_id = bom.bom_divisi_id JOIN material ON material.material_id = bom.bom_material_id JOIN uom ON uom.uom_id = material.material_uom_id");
+if(isset($_GET['status'])){
+  if($_GET['status'] == 1){
+    mysqli_query($conn, "UPDATE so JOIN bom ON bom.bom_id = so.so_bom_id SET so.so_status = $_GET[status] WHERE so_no_po = '$_GET[nopo]' AND bom.bom_item_id = '$_GET[itemid]'");
+    header('Location: so.php?pesan=selesai');
+  }
+}
+
+$query = mysqli_query($conn, "SELECT DISTINCT so.so_tanggal, so.so_no_po, item.item_id, item.item_nama, so.so_qty_order, so.so_lot_number FROM so JOIN bom ON bom.bom_id = so.so_bom_id JOIN item ON item.item_id = bom.bom_item_id JOIN divisi ON divisi.divisi_id = bom.bom_divisi_id JOIN material ON material.material_id = bom.bom_material_id JOIN uom ON uom.uom_id = material.material_uom_id WHERE so.so_status = 0");
 
 $bulan_sekarang = date('m-Y');
 ?>
@@ -60,6 +67,13 @@ $bulan_sekarang = date('m-Y');
                       <span aria-hidden="true">&times;</span>
                     </button>
                   </div>
+                <?php elseif($_GET['pesan'] == 'selesai') : ?>
+                  <div class="alert alert-success alert-dismissible fade show mt-3" role="alert">
+                    Data dipindahkan ke posting
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
                 <?php endif; ?>    
               <?php endif; ?>
           </div>
@@ -85,7 +99,7 @@ $bulan_sekarang = date('m-Y');
               <button class="btn btn-primary">Export Excel PO</button>
             </a>
           </div>
-          <div class="col-md d-flex justify-content-end">
+          <!-- <div class="col-md d-flex justify-content-end">
             <div class="dropdown">
               <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-expanded="false">
                 Edit Button
@@ -95,7 +109,7 @@ $bulan_sekarang = date('m-Y');
                 <a class="dropdown-item" href="so.php?action=nonaktif">Nonaktifkan</a>
               </div>
             </div>
-          </div>
+          </div> -->
         </div>
         <div class="row">
           <div class="col">
@@ -115,7 +129,6 @@ $bulan_sekarang = date('m-Y');
                   </thead>
                   <tbody>
                     <?php while($so = mysqli_fetch_assoc($query)) : ?>
-                      <?php $sobulan = date('m-Y', strtotime($so['so_tanggal']));?>
                       <tr>
                           <td></td>
                           <td><?= $so['so_no_po']; ?></td>
@@ -125,24 +138,9 @@ $bulan_sekarang = date('m-Y');
                           <td><?= $so['so_lot_number']; ?></td>
                           <td>
                             <a href="so-detail.php?nopo=<?= $so['so_no_po']; ?>&itemid=<?= $so['item_id']; ?>"><span class="badge rounded-pill bg-success">Detail</span></a>
-                            <?php if(isset($_GET['action'])) :?>
-                              <?php if($_GET['action'] == 'aktif') :?>
-                                <?php $_SESSION["toggle"] = $_GET['action']; ?>
-                                <a href="so-edit.php?nopo=<?= $so['so_no_po']; ?>&itemid=<?= $so['item_id']; ?>"><span class="badge rounded-pill bg-primary">Edit</span></a>
-                                <a href="so-delete.php?nopo=<?= $so['so_no_po']; ?>&itemid=<?= $so['item_id']; ?>"><span class="badge rounded-pill bg-danger">Delete</span></a>
-                              <?php elseif($_GET['action'] == 'nonaktif') :?>
-                                <?php $_SESSION["toggle"] = $_GET['action']; ?> 
-                                <?php if($bulan_sekarang == $sobulan) :?>
-                                  <a href="so-edit.php?nopo=<?= $so['so_no_po']; ?>&itemid=<?= $so['item_id']; ?>"><span class="badge rounded-pill bg-primary">Edit</span></a>
-                                  <a href="so-delete.php?nopo=<?= $so['so_no_po']; ?>&itemid=<?= $so['item_id']; ?>"><span class="badge rounded-pill bg-danger">Delete</span></a>
-                                <?php endif; ?>    
-                              <?php endif; ?>
-                            <?php else : ?>
-                              <?php if($bulan_sekarang == $sobulan) :?>
-                                <a href="so-edit.php?nopo=<?= $so['so_no_po']; ?>&itemid=<?= $so['item_id']; ?>"><span class="badge rounded-pill bg-primary">Edit</span></a>
-                                <a href="so-delete.php?nopo=<?= $so['so_no_po']; ?>&itemid=<?= $so['item_id']; ?>"><span class="badge rounded-pill bg-danger">Delete</span></a>
-                              <?php endif; ?>
-                            <?php endif; ?>
+                            <a href="so-edit.php?nopo=<?= $so['so_no_po']; ?>&itemid=<?= $so['item_id']; ?>"><span class="badge rounded-pill bg-primary">Edit</span></a>
+                            <a href="so-delete.php?nopo=<?= $so['so_no_po']; ?>&itemid=<?= $so['item_id']; ?>"><span class="badge rounded-pill bg-danger">Delete</span></a>
+                            <a href="so.php?nopo=<?= $so['so_no_po']; ?>&itemid=<?= $so['item_id']; ?>&status=1"><span class="badge rounded-pill bg-dark">Selesai</span></a>
                           </td>
                       </tr> 
                     <?php endwhile; ?>                     
